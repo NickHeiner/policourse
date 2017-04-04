@@ -18,8 +18,4 @@ class App extends Component {
   }
 }
 
-
-function* generator() {
-  yield *other();
-}
 export default App;
