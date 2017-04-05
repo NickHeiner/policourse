@@ -12,8 +12,11 @@ class ConversationList extends PureComponent {
     if (!conversations || !conversations.size) {
       return <p>There are no conversations.</p>;
     }
+
     return <ul>
-      {conversations.map((conversation, index) => <li key={index}>{conversation.get('hostId')}</li>)}
+      {conversations.map((conversation, index) => 
+        <li key={index}>{conversation.get('hostId')}</li>)
+      }
     </ul>;
   }
 }

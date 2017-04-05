@@ -2,6 +2,8 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import {fromJS} from 'immutable';
 import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
+import {Router, Route, browserHistory} from 'react-router';
+import NoMatch from './components/NoMatch';
 import {createLogger} from 'redux-logger';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -44,7 +46,10 @@ const store = createStoreWithFirebase(rootReducer, applyMiddleware(logger));
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router history={browserHistory}>
+      <Route path="/" component={App} />
+      <Route path="*" component={NoMatch} />
+    </Router>
   </Provider>,
   document.getElementById('root')
 );
