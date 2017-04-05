@@ -13,28 +13,39 @@ class App extends Component {
             <h2>Welcome to React</h2>
           </div>
           <p className="App-intro">
-            <ConnectedSignInMessage />
-            <ConnectedAuthButton />
+            <SignedInMessage />
+            <AuthButton />
           </p>
         </div>
     );
   }
 }
 
-const SignedInMessage = ({currentUser: {loggedIn, name}}) => loggedIn ? <span>Logged in as {name}</span> : null;
-const ConnectedSignInMessage = connect(
+@connect(
   state => ({currentUser: state.get('currentUser')}),
-)(toJS(SignedInMessage));
+)
+@toJS
+class SignedInMessage extends React.PureComponent {
+  render() {
+    const {currentUser: {loggedIn, name}} = this.props;
+    return loggedIn ? <span>Logged in as {name}</span> : null;
+  }
+}
 
-const AuthButton = ({currentUser, onSignInClick}) => <button onClick={onSignInClick}>
-    {currentUser.loggedIn ? 'Sign out' : 'Sign in'}
-  </button>;
-
-const ConnectedAuthButton = connect(
+@connect(
   state => ({currentUser: state.get('currentUser')}),
   dispatch => 
     ({onSignInClick: () => dispatch({type: 'SIGN_IN'})})
-)(toJS(AuthButton));
+)
+@toJS
+class AuthButton extends React.PureComponent {
+  render() {
+    const {currentUser, onSignInClick} = this.props;
+    return <button onClick={onSignInClick}>
+      {currentUser.loggedIn ? 'Sign out' : 'Sign in'}
+    </button>;
+  }
+}
 
 function toJS(WrappedComponent) {
   function ToJSWrapper(wrappedComponentProps) {
