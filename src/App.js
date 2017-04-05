@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import {toJS} from './utils';
-import {getFirebase} from 'react-redux-firebase';
+import {getFirebase, firebaseConnect} from 'react-redux-firebase';
+import autobind from 'autobind-decorator';
 import ConversationList from './components/ConversationList';
 import './App.css';
 
@@ -14,11 +15,30 @@ class App extends PureComponent {
           </div>
           <div className="App-intro">
             <ConversationList />
+            <AddConversationButton />
             <SignedInMessage />
             <AuthButton />
           </div>
         </div>
     );
+  }
+}
+
+@firebaseConnect()
+@connect(
+  ({firebase}) => ({profile: firebase.get('profile')})
+)
+class AddConversationButton extends PureComponent {
+  render() {
+    return <button onClick={this.addConversation}>+</button>;
+  }
+
+  @autobind
+  addConversation() {
+    this.props.firebase.push('/conversations', {
+      // I sure hope this is a stable way to find the current user's uid lol.
+      hostId: this.props.firebase.auth().currentUser.uid
+    });
   }
 }
 
