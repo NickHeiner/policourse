@@ -1,22 +1,22 @@
-import React, {Component} from 'react';
-import logo from './logo.svg';
+import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import {ensureNativeJSValue} from './utils';
+import {toJS} from './utils';
 import {getFirebase} from 'react-redux-firebase';
+import ConversationList from './components/ConversationList';
 import './App.css';
 
-class App extends Component {
+class App extends PureComponent {
   render() {
     return (
         <div className="App">
           <div className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h2>Welcome to React</h2>
+            <h1>PoliCourse</h1>
           </div>
-          <p className="App-intro">
+          <div className="App-intro">
+            <ConversationList />
             <SignedInMessage />
             <AuthButton />
-          </p>
+          </div>
         </div>
     );
   }
@@ -26,7 +26,7 @@ class App extends Component {
   ({firebase}) => ({profile: firebase.get('profile')})
 )
 @toJS
-class SignedInMessage extends React.PureComponent {
+class SignedInMessage extends PureComponent {
   render() {
     const {profile} = this.props;
     return profile ? <span>Logged in as {profile.displayName}</span> : null;
@@ -46,29 +46,13 @@ class SignedInMessage extends React.PureComponent {
     }})
 )
 @toJS
-class AuthButton extends React.PureComponent {
+class AuthButton extends PureComponent {
   render() {
     const {profile, onClick} = this.props;
     return <button onClick={() => onClick(!profile)}>
       {profile ? 'Sign out' : 'Sign in'}
     </button>;
   }
-}
-
-function toJS(WrappedComponent) {
-  function ToJSWrapper(wrappedComponentProps) {
-    const propsJS = Object.entries(wrappedComponentProps)
-      .reduce((newProps, [key, value]) => ({
-        ...newProps,
-        [key]: ensureNativeJSValue(value)
-      }), {});
-
-    return <WrappedComponent {...propsJS} />;
-  }
-
-  ToJSWrapper.displayName = `toJS(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
-
-  return ToJSWrapper;
 }
 
 export default App;
