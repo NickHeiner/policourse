@@ -22,7 +22,7 @@ class App extends Component {
 }
 
 @connect(
-  state => ({currentUser: state.get('currentUser')}),
+  state => ({currentUser: state.local.get('currentUser')}),
 )
 @toJS
 class SignedInMessage extends React.PureComponent {
@@ -33,7 +33,7 @@ class SignedInMessage extends React.PureComponent {
 }
 
 @connect(
-  state => ({currentUser: state.get('currentUser')}),
+  state => ({currentUser: state.local.get('currentUser')}),
   dispatch => 
     ({onSignInClick: () => dispatch({type: 'SIGN_IN'})})
 )

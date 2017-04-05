@@ -1,26 +1,46 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 import {fromJS} from 'immutable';
-import {createStore, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
 import {createLogger} from 'redux-logger';
 import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import {ensureNativeJSValue} from './utils';
+import {reactReduxFirebase, firebaseStateReducer} from 'react-redux-firebase';
 
 const logger = createLogger({stateTransformer: ensureNativeJSValue});
 
-const initialState = fromJS({currentUser: {name: 'Nick'}});
-function reducer(state = initialState, action) {
+const initialState = fromJS({currentUser: {}});
+function local(state = initialState, action) {
   switch (action.type) {
   case 'SIGN_IN': 
-    return state.setIn(['currentUser', 'loggedIn'], true);
+    return state
+      .setIn(['currentUser', 'loggedIn'], true)
+      .setIn(['currentUser', 'name'], 'Nick');
   default:
     return state;
   }
 }
 
-const store = createStore(reducer, applyMiddleware(logger));
+const firebaseConfig = {
+  apiKey: 'AIzaSyCGnYHyEB2_iHhVmrvnHYkpt_KJlxyb3k0',
+  authDomain: 'policourse.firebaseapp.com',
+  databaseURL: 'https://policourse.firebaseio.com',
+  projectId: 'policourse',
+  messagingSenderId: '603341743697'
+};
+
+const rootReducer = combineReducers({
+  firebase: firebaseStateReducer,
+  local
+});
+
+const createStoreWithFirebase = compose(
+  reactReduxFirebase(firebaseConfig, {userProfile: 'users'}),
+)(createStore);
+
+const store = createStoreWithFirebase(rootReducer, applyMiddleware(logger));
 
 ReactDOM.render(
   <Provider store={store}>
