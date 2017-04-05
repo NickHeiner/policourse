@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import {connect} from 'react-redux';
 import {ensureNativeJSValue} from './utils';
+import {getFirebase} from 'react-redux-firebase';
 import './App.css';
 
 class App extends Component {
@@ -22,27 +23,27 @@ class App extends Component {
 }
 
 @connect(
-  state => ({currentUser: state.local.get('currentUser')}),
+  ({firebase}) => ({profile: firebase.get('profile')})
 )
 @toJS
 class SignedInMessage extends React.PureComponent {
   render() {
-    const {currentUser: {loggedIn, name}} = this.props;
-    return loggedIn ? <span>Logged in as {name}</span> : null;
+    const {profile} = this.props;
+    return profile ? <span>Logged in as {profile.displayName}</span> : null;
   }
 }
 
 @connect(
-  state => ({currentUser: state.local.get('currentUser')}),
-  dispatch => 
-    ({onSignInClick: () => dispatch({type: 'SIGN_IN'})})
+  ({firebase}) => ({profile: firebase.get('profile')}),
+  () => 
+    ({onSignInClick: () => getFirebase().login({provider: 'Google'})})
 )
 @toJS
 class AuthButton extends React.PureComponent {
   render() {
-    const {currentUser, onSignInClick} = this.props;
+    const {profile, onSignInClick} = this.props;
     return <button onClick={onSignInClick}>
-      {currentUser.loggedIn ? 'Sign out' : 'Sign in'}
+      {profile ? 'Sign out' : 'Sign in'}
     </button>;
   }
 }
