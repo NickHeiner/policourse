@@ -36,13 +36,20 @@ class SignedInMessage extends React.PureComponent {
 @connect(
   ({firebase}) => ({profile: firebase.get('profile')}),
   () => 
-    ({onSignInClick: () => getFirebase().login({provider: 'Google'})})
+    ({onClick: signIn => {
+      const firebase = getFirebase();
+      if (signIn) {
+        firebase.login({provider: 'Google'});
+      } else {
+        firebase.logout();
+      }
+    }})
 )
 @toJS
 class AuthButton extends React.PureComponent {
   render() {
-    const {profile, onSignInClick} = this.props;
-    return <button onClick={onSignInClick}>
+    const {profile, onClick} = this.props;
+    return <button onClick={() => onClick(!profile)}>
       {profile ? 'Sign out' : 'Sign in'}
     </button>;
   }
