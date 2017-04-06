@@ -1,9 +1,15 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import {fromJS} from 'immutable';
 import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
-import {Router, Route, browserHistory} from 'react-router';
+import {reducer as formReducer} from 'redux-form';
+import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import NoMatch from './components/NoMatch';
+import HomePage from './components/HomePage';
+import ViewConversationSources from './components/ViewConversationSources';
+import ViewConversationFrame from './components/ViewConversationFrame';
+import ViewConversationDialogue from './components/ViewConversationDialogue';
+import LeaveConversation from './components/LeaveConversation';
+import NewConversation from './components/NewConversation';
 import {createLogger} from 'redux-logger';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -12,18 +18,6 @@ import {ensureNativeJSValue} from './utils';
 import {reactReduxFirebase, firebaseStateReducer} from 'react-redux-firebase';
 
 const logger = createLogger({stateTransformer: ensureNativeJSValue});
-
-const initialState = fromJS({currentUser: {}});
-function local(state = initialState, action) {
-  switch (action.type) {
-  case 'SIGN_IN': 
-    return state
-      .setIn(['currentUser', 'loggedIn'], true)
-      .setIn(['currentUser', 'name'], 'Nick');
-  default:
-    return state;
-  }
-}
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCGnYHyEB2_iHhVmrvnHYkpt_KJlxyb3k0',
@@ -35,7 +29,16 @@ const firebaseConfig = {
 
 const rootReducer = combineReducers({
   firebase: firebaseStateReducer,
-  local
+  form: formReducer.plugin({
+    reply: (state, action) => {
+      switch (action.type) {
+      case '@@reactReduxFirebase/SET': 
+        return action.requested ? undefined : state;
+      default:
+        return state;
+      }
+    }
+  })
 });
 
 const createStoreWithFirebase = compose(
@@ -47,7 +50,17 @@ const store = createStoreWithFirebase(rootReducer, applyMiddleware(logger));
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={App} />
+      <Route path="/" component={App}>
+        <IndexRoute component={HomePage} />
+        <Route path="conversation">
+          <Route path="new" component={NewConversation} />
+          <Route path=":id" component={ViewConversationFrame}>
+            <IndexRoute component={ViewConversationDialogue} />
+            <Route path="sources" component={ViewConversationSources} />
+            <Route path="leave" component={LeaveConversation} />
+          </Route>
+        </Route>
+      </Route>
       <Route path="*" component={NoMatch} />
     </Router>
   </Provider>,

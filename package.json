@@ -5,12 +5,15 @@
   "dependencies": {
     "autobind-decorator": "^1.3.4",
     "immutable": "^3.8.1",
+    "lodash": "^4.17.4",
+    "lodash.get": "^4.4.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.3",
     "react-redux-firebase": "^1.4.0-beta.4",
     "react-router": "^3.0.3",
     "redux": "^3.6.0",
+    "redux-form": "^6.6.1",
     "redux-logger": "^3.0.1"
   },
   "devDependencies": {
@@ -110,7 +113,15 @@
       "no-case-declarations": "error",
       "no-else-return": "warn",
       "no-implicit-coercion": "error",
-      "no-magic-numbers": "warn",
+      "no-magic-numbers": [
+        "warn",
+        {
+          "ignoreArrayIndexes": true,
+          "ignore": [
+            0
+          ]
+        }
+      ],
       "no-multi-spaces": "warn",
       "no-param-reassign": "warn",
       "no-return-assign": "error",
