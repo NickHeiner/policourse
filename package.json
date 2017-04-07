@@ -7,6 +7,7 @@
     "immutable": "^3.8.1",
     "lodash": "^4.17.4",
     "lodash.get": "^4.4.2",
+    "moment": "^2.18.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.3",
@@ -14,7 +15,8 @@
     "react-router": "^3.0.3",
     "redux": "^3.6.0",
     "redux-form": "^6.6.1",
-    "redux-logger": "^3.0.1"
+    "redux-logger": "^3.0.1",
+    "textarea-caret": "^3.0.2"
   },
   "devDependencies": {
     "autoprefixer": "6.7.2",
@@ -118,7 +120,8 @@
         {
           "ignoreArrayIndexes": true,
           "ignore": [
-            0
+            0,
+            1
           ]
         }
       ],

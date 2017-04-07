@@ -14,6 +14,7 @@ import {createLogger} from 'redux-logger';
 import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
+import {fromJS} from 'immutable';
 import {ensureNativeJSValue} from './utils';
 import {reactReduxFirebase, firebaseStateReducer} from 'react-redux-firebase';
 
@@ -27,6 +28,19 @@ const firebaseConfig = {
   messagingSenderId: '603341743697'
 };
 
+function uiReducer(state = fromJS({}), action = {}) {
+  switch (action.type) {
+  case 'START_TYPING_CITE':
+    return state.setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], true);
+  case 'STOP_TYPING_CITE':
+    return state.setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], false);
+  default:
+    return state;
+  }
+}
+
+// TODO All of our state is an ImmutableJS object, except the very top level. We should fix that.
+// We may need another redux package to get an immutable-aware combineReducers function.
 const rootReducer = combineReducers({
   firebase: firebaseStateReducer,
   form: formReducer.plugin({
@@ -38,7 +52,8 @@ const rootReducer = combineReducers({
         return state;
       }
     }
-  })
+  }),
+  ui: uiReducer
 });
 
 const createStoreWithFirebase = compose(

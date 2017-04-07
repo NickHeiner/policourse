@@ -14,18 +14,11 @@ import {connect} from 'react-redux';
 class LeaveConversation extends PureComponent {
   render() {
     const leaveConversation = leaveFormData => {
-      const participationIdForCurrentUser = this.props.conversations
-        .getIn([this.props.params.id, 'participants'])
-        .findKey(uid => uid === this.props.currentUser.uid);
-
       this.props.firebase
-        .ref(`/conversations/${this.props.params.id}/participants/${participationIdForCurrentUser}`)
-        .remove();
-
-      this.props.firebase
-        .ref(`/conversations/${this.props.params.id}/former-participants/`)
+        .ref(`/conversations/${this.props.params.id}/leaveRecords/`)
         .push({
           userId: this.props.currentUser.uid,
+          createdAt: this.props.firebase.database.ServerValue.TIMESTAMP,
           reason: leaveFormData.reason
         });
 
