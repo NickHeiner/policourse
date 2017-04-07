@@ -9,7 +9,6 @@ import {memoize as _memoize} from 'lodash';
 import ReactionButton from './ReactionButton';
 import {Link} from 'react-router';
 import moment from 'moment';
-import textareaCaret from 'textarea-caret';
 
 const getUrlsOfString = _memoize(str => {
   if (!str) {
@@ -216,7 +215,7 @@ class ReplyForm extends PureComponent {
     };
 
     const START_CITE_CHAR = '[';
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       if (event.key === START_CITE_CHAR) {
         this.props.dispatch({
           type: 'START_TYPING_CITE'
