@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
+import {Item, Icon} from 'semantic-ui-react';
+import './ConversationList.css';
 
 @firebaseConnect(['/conversations'])
 @connect(
@@ -21,10 +23,12 @@ class ConversationList extends PureComponent {
       return <p>There are no conversations.</p>;
     }
 
-    return <ul>
+    return <ul className="conversation-list">
       {conversations
         .map((conversation, id) => 
-          <li key={id}><ConversationListItem conversation={conversation.set('id', id)} /></li>)
+          // <ItemExampleItems />
+          <li key={id}><ConversationListItem conversation={conversation.set('id', id)} /></li>
+        )
         .toList()
         .toJS()
       }
@@ -40,10 +44,14 @@ class ConversationListItem extends PureComponent {
   render() {
     const {conversation, users} = this.props;
     const hostName = users ? users.get(conversation.get('hostId')).get('displayName') : null;
-    return <Link to={`/conversation/${conversation.get('id')}`} style={{border: '1px solid black'}}>
-      <h3>{conversation.get('topic')}</h3>
-      {hostName && <p>Started by {hostName}.</p>}
-    </Link>;
+    return <Item className="conversation-list-item">
+      <Item.Content>
+        <Link to={`/conversation/${conversation.get('id')}`}>
+          <Item.Header as="h3"><Icon name="comments" />{conversation.get('topic')}</Item.Header>
+          {hostName && <Item.Description>Started by {hostName}.</Item.Description>}
+        </Link>
+      </Item.Content>
+    </Item>;
   }
 }
 
