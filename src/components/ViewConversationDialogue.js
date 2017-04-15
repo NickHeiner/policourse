@@ -11,6 +11,7 @@ import {Link} from 'react-router';
 import moment from 'moment';
 import textareaCaret from 'textarea-caret';
 import _get from 'lodash.get';
+import classnames from 'classnames';
 
 const getUrlsOfString = _memoize(str => {
   if (!str) {
@@ -216,16 +217,23 @@ class ReplyForm extends PureComponent {
       }
     };
 
+    const replyForm = this.props.replyForm || Map.of();
+
     const START_CITE_CHAR = '[';
     const handleKeyDown = event => {
-      if (this.textarea) {
-        this.props.dispatch({
-          type: 'TEXTAREA_CARET_POSITION_UPDATE',
-          payload: textareaCaret(this.textarea, this.textarea.selectionEnd)
-        });
-      }
-
-      if (event.key === START_CITE_CHAR) {
+      if (replyForm.get('showCiteSuggestions')) {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          const eventType = event.key === 'ArrowDown' 
+            ? 'CITE_SUGGESTION_SELECTED_INCREMENT' : 'CITE_SUGGESTION_SELECTED_DECREMENT';
+          this.props.dispatch({
+            type: eventType,
+            payload: {
+              sourceCount: this.props.conversation.get('sources').size
+            }
+          });
+        }
+      } else if (event.key === START_CITE_CHAR) {
         this.props.dispatch({
           type: 'START_TYPING_CITE'
         });
@@ -234,6 +242,14 @@ class ReplyForm extends PureComponent {
           type: 'STOP_TYPING_CITE'
         });
       }
+
+      if (this.textarea) {
+        this.props.dispatch({
+          type: 'TEXTAREA_CARET_POSITION_UPDATE',
+          payload: textareaCaret(this.textarea, this.textarea.selectionEnd)
+        });
+      }
+
     };
 
     const handleOnBlur = () => {
@@ -241,8 +257,8 @@ class ReplyForm extends PureComponent {
     };
 
     let absoluteTextAreaCaretPosition;
-    if (this.props.replyForm && this.props.replyForm.get('showCiteSuggestions')) {
-      const relativeTextAreaCaretPosition = this.props.replyForm.get('textAreaCaretPosition');
+    if (replyForm.get('showCiteSuggestions')) {
+      const relativeTextAreaCaretPosition = replyForm.get('textAreaCaretPosition');
       if (relativeTextAreaCaretPosition) {
         const textareaRect = {top: this.textarea.offsetTop, left: this.textarea.offsetLeft};
         const suggesterOffset = {top: 15, left: 4};
@@ -264,7 +280,9 @@ class ReplyForm extends PureComponent {
 
       {absoluteTextAreaCaretPosition && 
         <div className="cite-suggestions" style={absoluteTextAreaCaretPosition}>
-          <p>cite suggestions</p>
+          <SourceSuggestions 
+            conversation={this.props.conversation} 
+            selectedCiteIndex={replyForm.get('selectedCiteIndex')} />
         </div>
       }
 
@@ -278,6 +296,20 @@ class ReplyForm extends PureComponent {
       </ul>
     </form>;
   }
+}
+
+function SourceSuggestions({conversation, selectedCiteIndex}) {
+  return <ul>
+      {
+        conversation.get('sources').toList().map((source, sourceIndex) => 
+          <li key={sourceIndex} 
+            className={classnames({selected: selectedCiteIndex === sourceIndex})}>
+              {source.get('href')}
+          </li>
+        )
+        .toJS()
+      }
+    </ul>;
 }
 
 @toJS

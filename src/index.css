@@ -16,3 +16,7 @@ a.active {
   position: absolute;
   background: red;
 }
+
+.cite-suggestions li.selected {
+  background: blue;
+}

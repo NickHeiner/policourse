@@ -37,6 +37,18 @@ function uiReducer(state = fromJS({}), action = {}) {
     return state.setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], true);
   case 'STOP_TYPING_CITE':
     return state.setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], false);
+  case 'CITE_SUGGESTION_SELECTED_INCREMENT':
+    return (() => {
+      const selectedCiteIndexPath = ['viewConversation', 'replyForm', 'selectedCiteIndex'];
+      const currIndex = state.getIn(selectedCiteIndexPath, 0);
+      return state.setIn(selectedCiteIndexPath, Math.min(action.payload.sourceCount - 1, currIndex + 1));
+    })();
+  case 'CITE_SUGGESTION_SELECTED_DECREMENT':
+    return (() => {
+      const selectedCiteIndexPath = ['viewConversation', 'replyForm', 'selectedCiteIndex'];
+      const currIndex = state.getIn(selectedCiteIndexPath, 0);
+      return state.setIn(selectedCiteIndexPath, Math.max(0, currIndex - 1));
+    })();
   default:
     return state;
   }
