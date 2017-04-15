@@ -31,6 +31,24 @@ const getUrlsOfString = _memoize(str => {
   return matches;
 });
 
+const getCitesOfString = _memoize(str => {
+  if (!str) {
+    return [];
+  }
+
+  let mostRecentMatch;
+  const matches = [];
+  const citeRegex = /\[(\d+)\]/g;
+  // eslint-disable-next-line no-cond-assign
+  while ((mostRecentMatch = citeRegex.exec(str)) !== null) {
+    matches.push({
+      index: mostRecentMatch.index,
+      humanSourceId: mostRecentMatch[1]
+    });
+  }
+  return matches;
+});
+
 function getActivityEventList(records = Map(), typeName) {
   return records.map((record, key) => record.set('key', key).set('type', typeName));
 }
@@ -140,6 +158,18 @@ class ViewConversationDialogue extends PureComponent {
       ...replyFormData,
       createdAt: this.props.firebase.database.ServerValue.TIMESTAMP,
       authorId: this.props.currentUser.uid
+    });
+
+    getCitesOfString(replyFormData.content).map(match => {
+      const conversation = this.props.conversations.get(this.props.params.id);
+      const referencedSourceKey = conversation
+        .get('sources')
+        .findKey(source => source.get('humanSourceId').toString() === match.humanSourceId);
+
+      this.props.firebase.ref(`/conversations/${this.props.params.id}/sources/${referencedSourceKey}/uses`).push({
+        fromReply: pushedReply.key,
+        indexInReply: match.index
+      });
     });
 
     getUrlsOfString(replyFormData.content).map(async source => {
@@ -320,9 +350,13 @@ class ReplyForm extends PureComponent {
 }
 
 function SourceSuggestions({conversation, selectedCiteIndex}) {
+  const sources = conversation.get('sources');
+  if (!sources) {
+    return null;
+  }
   return <ul>
       {
-        conversation.get('sources').toList().map((source, sourceIndex) => 
+        sources.toList().map((source, sourceIndex) => 
           <li key={sourceIndex} 
             className={classnames({selected: selectedCiteIndex === sourceIndex})}>
               #{source.get('humanSourceId')}: {source.get('href')}
