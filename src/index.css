@@ -7,3 +7,12 @@ body {
 a.active {
   font-weight: bold;
 }
+
+.reply-form {
+  position: relative;
+}
+
+.cite-suggestions {
+  position: absolute;
+  background: red;
+}

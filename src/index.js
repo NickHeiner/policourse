@@ -30,6 +30,8 @@ const firebaseConfig = {
 
 function uiReducer(state = fromJS({}), action = {}) {
   switch (action.type) {
+  case 'TEXTAREA_CARET_POSITION_UPDATE':
+    return state.setIn(['viewConversation', 'replyForm', 'textAreaCaretPosition'], action.payload);
   case 'START_TYPING_CITE':
     return state.setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], true);
   case 'STOP_TYPING_CITE':

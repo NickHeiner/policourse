@@ -9,6 +9,8 @@ import {memoize as _memoize} from 'lodash';
 import ReactionButton from './ReactionButton';
 import {Link} from 'react-router';
 import moment from 'moment';
+import textareaCaret from 'textarea-caret';
+import _get from 'lodash.get';
 
 const getUrlsOfString = _memoize(str => {
   if (!str) {
@@ -216,6 +218,13 @@ class ReplyForm extends PureComponent {
 
     const START_CITE_CHAR = '[';
     const handleKeyDown = event => {
+      if (this.textarea) {
+        this.props.dispatch({
+          type: 'TEXTAREA_CARET_POSITION_UPDATE',
+          payload: textareaCaret(this.textarea, this.textarea.selectionEnd)
+        });
+      }
+
       if (event.key === START_CITE_CHAR) {
         this.props.dispatch({
           type: 'START_TYPING_CITE'
@@ -228,17 +237,36 @@ class ReplyForm extends PureComponent {
     };
 
     const handleOnBlur = () => {
-      this.props.dispatch({type: 'STOP_TYPING_CITE'});
+      // this.props.dispatch({type: 'STOP_TYPING_CITE'});
     };
 
-    return <form onSubmit={this.props.handleSubmit}>
-      {this.props.replyForm && this.props.replyForm.get('showCiteSuggestions') && <p>cite suggestions</p>}
+    let absoluteTextAreaCaretPosition;
+    if (this.props.replyForm && this.props.replyForm.get('showCiteSuggestions')) {
+      const relativeTextAreaCaretPosition = this.props.replyForm.get('textAreaCaretPosition');
+      if (relativeTextAreaCaretPosition) {
+        const textareaRect = {top: this.textarea.offsetTop, left: this.textarea.offsetLeft};
+        const suggesterOffset = {top: 15, left: 4};
+        const scrollAdjustment = {top: -(this.textarea.scrollHeight - this.textarea.offsetHeight), left: 0};
+        absoluteTextAreaCaretPosition = [
+          scrollAdjustment, suggesterOffset, textareaRect, relativeTextAreaCaretPosition
+        ].reduce(
+          (acc, el) => ({top: acc.top + el.top, left: acc.left + el.left})
+        );
+      }
+    } 
 
+    return <form onSubmit={this.props.handleSubmit} className="reply-form">
       <UserAvatar user={this.props.currentUser} />
       <label htmlFor="content">{this.props.conversation.get('topic')}</label>
       <Field name="content" component="textarea" withRef ref={getTextarea} 
         onKeyDown={handleKeyDown} onBlur={handleOnBlur} />
       <button type="submit" disabled={this.props.pristine}>Reply</button>
+
+      {absoluteTextAreaCaretPosition && 
+        <div className="cite-suggestions" style={absoluteTextAreaCaretPosition}>
+          <p>cite suggestions</p>
+        </div>
+      }
 
       <h5>Sources</h5>
       <ul>
