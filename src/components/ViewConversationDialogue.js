@@ -160,7 +160,7 @@ class ViewConversationDialogue extends PureComponent {
       authorId: this.props.currentUser.uid
     });
 
-    getCitesOfString(replyFormData.content).map(match => {
+    getCitesOfString(replyFormData.content).forEach(match => {
       const conversation = this.props.conversations.get(this.props.params.id);
       const referencedSourceKey = conversation
         .get('sources')
@@ -172,7 +172,7 @@ class ViewConversationDialogue extends PureComponent {
       });
     });
 
-    getUrlsOfString(replyFormData.content).map(async source => {
+    getUrlsOfString(replyFormData.content).forEach(async source => {
       const sourcesRef = this.props.firebase.ref(`/conversations/${this.props.params.id}/sources`);
       const pushedSource = await sourcesRef.push({href: source.match});
       pushedSource.child('uses').push({

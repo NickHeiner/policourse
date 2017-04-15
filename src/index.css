@@ -25,6 +25,7 @@ a.active {
   padding-top: 5px;
   padding-bottom: 5px;
   background: grey;
+  margin-bottom: 10px;
 }
 
 .app-header a {
