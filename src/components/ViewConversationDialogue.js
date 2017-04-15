@@ -142,13 +142,20 @@ class ViewConversationDialogue extends PureComponent {
       authorId: this.props.currentUser.uid
     });
 
-    getUrlsOfString(replyFormData.content).map(source => 
-      this.props.firebase.push(`/conversations/${this.props.params.id}/sources`, {
+    getUrlsOfString(replyFormData.content).map(async source => {
+      const sourcesRef = this.props.firebase.ref(`/conversations/${this.props.params.id}/sources`);
+      const pushedSource = await sourcesRef.push({href: source.match});
+      pushedSource.child('uses').push({
         fromReply: pushedReply.key,
-        href: source.match,
         indexInReply: source.index
-      })
-    );
+      });
+
+      sourcesRef.transaction(sources => {
+        if (sources) {
+          pushedSource.child('humanSourceId').set(Object.keys(sources).length);
+        }
+      });
+    });
   }
 }
 
@@ -232,16 +239,24 @@ class ReplyForm extends PureComponent {
               sourceCount: this.props.conversation.get('sources').size
             }
           });
-        }
+        } else if (event.key === 'Enter') {
+          event.preventDefault();
+          this.props.dispatch({
+            type: 'CHOOSE_CITE'
+          });
+          this.props.dispatch({
+            type: 'STOP_TYPING_CITE'
+          });
+        } else {
+          this.props.dispatch({
+            type: 'STOP_TYPING_CITE'
+          });
+        } 
       } else if (event.key === START_CITE_CHAR) {
         this.props.dispatch({
           type: 'START_TYPING_CITE'
         });
-      } else {
-        this.props.dispatch({
-          type: 'STOP_TYPING_CITE'
-        });
-      }
+      } 
 
       if (this.textarea) {
         this.props.dispatch({
@@ -253,13 +268,13 @@ class ReplyForm extends PureComponent {
     };
 
     const handleOnBlur = () => {
-      // this.props.dispatch({type: 'STOP_TYPING_CITE'});
+      this.props.dispatch({type: 'STOP_TYPING_CITE'});
     };
 
     let absoluteTextAreaCaretPosition;
     if (replyForm.get('showCiteSuggestions')) {
       const relativeTextAreaCaretPosition = replyForm.get('textAreaCaretPosition');
-      if (relativeTextAreaCaretPosition) {
+      if (relativeTextAreaCaretPosition && this.textarea) {
         const textareaRect = {top: this.textarea.offsetTop, left: this.textarea.offsetLeft};
         const suggesterOffset = {top: 15, left: 4};
         const scrollAdjustment = {top: -(this.textarea.scrollHeight - this.textarea.offsetHeight), left: 0};
@@ -304,7 +319,7 @@ function SourceSuggestions({conversation, selectedCiteIndex}) {
         conversation.get('sources').toList().map((source, sourceIndex) => 
           <li key={sourceIndex} 
             className={classnames({selected: selectedCiteIndex === sourceIndex})}>
-              {source.get('href')}
+              #{source.get('humanSourceId')}: {source.get('href')}
           </li>
         )
         .toJS()

@@ -34,21 +34,24 @@ function uiReducer(state = fromJS({}), action = {}) {
   case 'TEXTAREA_CARET_POSITION_UPDATE':
     return state.setIn(['viewConversation', 'replyForm', 'textAreaCaretPosition'], action.payload);
   case 'START_TYPING_CITE':
-    return state.setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], true);
+    return state
+      .setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], true)
+      .setIn(['viewConversation', 'replyForm', 'selectedCiteIndex'], 0);
   case 'STOP_TYPING_CITE':
     return state.setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], false);
   case 'CITE_SUGGESTION_SELECTED_INCREMENT':
     return (() => {
       const selectedCiteIndexPath = ['viewConversation', 'replyForm', 'selectedCiteIndex'];
-      const currIndex = state.getIn(selectedCiteIndexPath, 0);
+      const currIndex = state.getIn(selectedCiteIndexPath);
       return state.setIn(selectedCiteIndexPath, Math.min(action.payload.sourceCount - 1, currIndex + 1));
     })();
   case 'CITE_SUGGESTION_SELECTED_DECREMENT':
     return (() => {
       const selectedCiteIndexPath = ['viewConversation', 'replyForm', 'selectedCiteIndex'];
-      const currIndex = state.getIn(selectedCiteIndexPath, 0);
+      const currIndex = state.getIn(selectedCiteIndexPath);
       return state.setIn(selectedCiteIndexPath, Math.max(0, currIndex - 1));
     })();
+  // case 'CHOOSE_CITE': 
   default:
     return state;
   }
