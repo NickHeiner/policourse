@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
-import {Item, Icon} from 'semantic-ui-react';
+import {Item, Icon, Divider} from 'semantic-ui-react';
 import './ConversationList.css';
 
 @firebaseConnect(['/conversations'])
@@ -22,12 +22,20 @@ class ConversationList extends PureComponent {
     if (!conversations || !conversations.size) {
       return <p>There are no conversations.</p>;
     }
+    
+    const conversationList = conversations
+        .map((conversation, id) => conversation.set('id', id))
+        .toList();
 
     return <ul className="conversation-list">
-      {conversations
-        .map((conversation, id) => 
-          // <ItemExampleItems />
-          <li key={id}><ConversationListItem conversation={conversation.set('id', id)} /></li>
+      {conversationList
+        .map((conversation, index) => 
+          <li key={conversation.get('id')}>
+            <div>
+              <ConversationListItem conversation={conversation} />
+              {index !== conversationList.size - 1 && <Divider />}
+            </div>
+          </li>
         )
         .toList()
         .toJS()

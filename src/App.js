@@ -12,7 +12,7 @@ class App extends PureComponent {
           <div className="app-header">
             <Header as="h1" className="centered"><Link to="/">PoliCourse</Link></Header>
           </div>
-          <div>
+          <div className="centered">
             {this.props.children}
             <SignedInMessage />
             <AuthButton />

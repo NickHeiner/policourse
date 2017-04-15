@@ -1,13 +1,9 @@
 .conversation-list {
   list-style-type: none;
   padding-left: 0px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
 }
 
 .conversation-list .conversation-list-item {
-  border: 1px solid #999;
   margin-top: 5px;
   padding: 5px;
   border-radius: 5px;
