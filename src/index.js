@@ -19,6 +19,8 @@ import {ensureNativeJSValue} from './utils';
 import {reactReduxFirebase, firebaseStateReducer} from 'react-redux-firebase';
 import {composeWithDevTools} from 'redux-devtools-extension';
 
+import 'semantic-ui-css/semantic.css';
+
 const logger = createLogger({stateTransformer: ensureNativeJSValue});
 
 const firebaseConfig = {

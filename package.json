@@ -18,6 +18,8 @@
     "redux-devtools-extension": "^2.13.0",
     "redux-form": "^6.6.1",
     "redux-logger": "^3.0.1",
+    "semantic-ui-css": "^2.2.10",
+    "semantic-ui-react": "^0.67.2",
     "textarea-caret": "^3.0.2"
   },
   "devDependencies": {

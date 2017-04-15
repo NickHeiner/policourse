@@ -3,17 +3,16 @@ import {connect} from 'react-redux';
 import {toJS} from './utils';
 import {Link} from 'react-router';
 import {getFirebase} from 'react-redux-firebase';
-
-import './App.css';
+import {Header} from 'semantic-ui-react';
 
 class App extends PureComponent {
   render() {
     return (
-        <div className="App">
-          <div className="App-header">
-            <h1><Link to="/">PoliCourse</Link></h1>
+        <div>
+          <div className="app-header">
+            <Header as="h1" className="centered"><Link to="/">PoliCourse</Link></Header>
           </div>
-          <div className="App-intro">
+          <div>
             {this.props.children}
             <SignedInMessage />
             <AuthButton />
