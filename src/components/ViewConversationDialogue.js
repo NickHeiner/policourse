@@ -242,7 +242,13 @@ class ReplyForm extends PureComponent {
         } else if (event.key === 'Enter') {
           event.preventDefault();
           this.props.dispatch({
-            type: 'CHOOSE_CITE'
+            type: 'CHOOSE_CITE',
+            payload: {
+              humanSourceId: this.props.conversation.get('sources')
+                .toList()
+                .get(replyForm.get('selectedCiteIndex'))
+                .get('humanSourceId')
+            }
           });
           this.props.dispatch({
             type: 'STOP_TYPING_CITE'

@@ -51,7 +51,6 @@ function uiReducer(state = fromJS({}), action = {}) {
       const currIndex = state.getIn(selectedCiteIndexPath);
       return state.setIn(selectedCiteIndexPath, Math.max(0, currIndex - 1));
     })();
-  // case 'CHOOSE_CITE': 
   default:
     return state;
   }
@@ -62,10 +61,19 @@ function uiReducer(state = fromJS({}), action = {}) {
 const rootReducer = combineReducers({
   firebase: firebaseStateReducer,
   form: formReducer.plugin({
+    // It surprises me a bit that state is not an Immutable object here.
     reply: (state, action) => {
       switch (action.type) {
       case '@@reactReduxFirebase/SET': 
         return action.requested ? undefined : state;
+      case 'CHOOSE_CITE': 
+        return {
+          ...state,
+          values: {
+            ...state.values,
+            content: `${state.values.content}${action.payload.humanSourceId}]`
+          }
+        };
       default:
         return state;
       }
