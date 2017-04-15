@@ -17,6 +17,7 @@ import './index.css';
 import {fromJS} from 'immutable';
 import {ensureNativeJSValue} from './utils';
 import {reactReduxFirebase, firebaseStateReducer} from 'react-redux-firebase';
+import {composeWithDevTools} from 'redux-devtools-extension';
 
 const logger = createLogger({stateTransformer: ensureNativeJSValue});
 
@@ -62,7 +63,7 @@ const createStoreWithFirebase = compose(
   reactReduxFirebase(firebaseConfig, {userProfile: 'users'}),
 )(createStore);
 
-const store = createStoreWithFirebase(rootReducer, applyMiddleware(logger));
+const store = createStoreWithFirebase(rootReducer, composeWithDevTools(applyMiddleware(logger)));
 
 ReactDOM.render(
   <Provider store={store}>
