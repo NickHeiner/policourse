@@ -1,7 +1,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
-import {reducer as formReducer} from 'redux-form';
+import {reducer as formReducer} from 'redux-form/immutable';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import NoMatch from './components/NoMatch';
 import HomePage from './components/HomePage';

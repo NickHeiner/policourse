@@ -4,9 +4,22 @@ import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {Form, Button, Header} from 'semantic-ui-react';
-import './NewConversation.css'; 
+import './NewConversation.css';
+import _get from 'lodash.get'; 
 
-@reduxForm({form: 'newConversation'})
+const renderField = ({input, placeholder, type, meta: {touched, error}}) => (
+  <div>
+    <input {...input} placeholder={placeholder} type={type}/>
+    {touched && (error && <span>{error}</span>)}
+  </div>
+);
+
+const minTopicLength = 5;
+const validate = values => values.get('topic', '').length > minTopicLength 
+    ? {} 
+    : {topic: `Topics must be at least ${minTopicLength} characters long`};
+
+@reduxForm({form: 'newConversation', validate})
 class NewConversationForm extends PureComponent {
   render() {
     return <Form onSubmit={this.props.handleSubmit}>
@@ -15,13 +28,13 @@ class NewConversationForm extends PureComponent {
         <label htmlFor="topic">Topic</label>
         <Field 
           name="topic" 
-          component="input" 
+          component={renderField} 
           type="text" 
           placeholder="Should Milo Yiannopoulos be allowed to speak on college campuses?" 
         />
       </div>
       <div className="start-button-wrapper">
-        <Button primary type="submit">Start Conversation</Button>
+        <Button primary type="submit" disabled={this.props.pristine || this.props.invalid}>Start Conversation</Button>
       </div>
     </Form>;
   }
