@@ -12,7 +12,7 @@ import moment from 'moment';
 import textareaCaret from 'textarea-caret';
 import _get from 'lodash.get';
 import classnames from 'classnames';
-import {Comment} from 'semantic-ui-react';
+import {Divider, Comment, Form, Button} from 'semantic-ui-react';
 
 const getUrlsOfString = _memoize(str => {
   if (!str) {
@@ -123,6 +123,8 @@ class ViewConversationDialogue extends PureComponent {
             .toJS()}
           </Comment.Group>
       }
+
+      <Divider />
 
       {currentUserIsParticipant &&  
         <ReplyForm currentUser={currentUser} conversation={conversation} onSubmit={this.addReply} />
@@ -343,12 +345,13 @@ class ReplyForm extends PureComponent {
       }
     } 
 
-    return <form onSubmit={this.props.handleSubmit} className="reply-form">
-      <UserAvatar user={this.props.currentUser} />
-      <label htmlFor="content">{this.props.conversation.get('topic')}</label>
-      <Field name="content" component="textarea" withRef ref={getTextarea} 
-        onKeyDown={handleKeyDown} onBlur={handleOnBlur} />
-      <button type="submit" disabled={this.props.pristine}>Reply</button>
+    return <Form onSubmit={this.props.handleSubmit} className="reply-form">
+      <Form.Field>
+        <label htmlFor="content">{this.props.conversation.get('topic')}</label>
+        <Field name="content" component="textarea" withRef ref={getTextarea} 
+          onKeyDown={handleKeyDown} onBlur={handleOnBlur} />
+      </Form.Field>
+      <Button type="submit" disabled={this.props.pristine} primary icon="reply" content="Reply" />
 
       {absoluteTextAreaCaretPosition && 
         <div className="cite-suggestions" style={absoluteTextAreaCaretPosition}>
@@ -366,7 +369,7 @@ class ReplyForm extends PureComponent {
           )
         }
       </ul>
-    </form>;
+    </Form>;
   }
 }
 
