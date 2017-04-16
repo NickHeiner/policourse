@@ -27,7 +27,7 @@ class ConversationList extends PureComponent {
         .map((conversation, id) => conversation.set('id', id))
         .toList();
 
-    return <ul className="conversation-list">
+    return <ul className="semantic-list">
       {conversationList
         .map((conversation, index) => 
           <li key={conversation.get('id')}>

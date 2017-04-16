@@ -12,6 +12,7 @@ import moment from 'moment';
 import textareaCaret from 'textarea-caret';
 import _get from 'lodash.get';
 import classnames from 'classnames';
+import {Comment} from 'semantic-ui-react';
 
 const getUrlsOfString = _memoize(str => {
   if (!str) {
@@ -97,14 +98,15 @@ class ViewConversationDialogue extends PureComponent {
       switch (activityEvent.get('type')) {
       case 'reply':
         return <Reply 
+          key={activityEvent.get('key')}
           currentUser={currentUser} 
           users={users} 
           conversationId={this.props.params.id} 
           reply={activityEvent} />;
       case 'leave': 
-        return <LeaveNotice users={users} leaveRecord={activityEvent} />;
+        return <LeaveNotice users={users} leaveRecord={activityEvent} key={activityEvent.get('key')} />;
       case 'join': 
-        return <JoinNotice users={users} joinRecord={activityEvent} />;
+        return <JoinNotice users={users} joinRecord={activityEvent} key={activityEvent.get('key')} />;
       default:
         throw new Error(`Unrecognized activity event type: ${activityEvent.get('type')}`);
       }
@@ -114,15 +116,12 @@ class ViewConversationDialogue extends PureComponent {
       <p>Started <ShowDate timestampMs={conversation.get('createdAt')} /></p>
 
       {activityEvents && 
-          <ul>
-          {activityEvents.map(activityEvent => 
-            <li key={activityEvent.get('key')}>
-              {renderEvent(activityEvent)}
-            </li>
-          )
+          <Comment.Group as="ul" className="semantic-list">
+          {activityEvents
+            .map(renderEvent)
             .toList()
             .toJS()}
-          </ul>
+          </Comment.Group>
       }
 
       {currentUserIsParticipant &&  
@@ -194,9 +193,14 @@ function JoinNotice({users, joinRecord}) {
     return null;
   }
   const userWhoLeft = users.get(joinRecord.get('userId'));
-  return <div>
-      <UserAvatar user={userWhoLeft} /> joined <ShowDate timestampMs={joinRecord.get('createdAt')} />.
-    </div>;
+  return <Comment as="li">
+    <Comment.Avatar src={userWhoLeft.get('avatarUrl') || userWhoLeft.get('photoURL')} />
+    <Comment.Content>
+      <Comment.Metadata>
+        {userWhoLeft.get('displayName')} joined <ShowDate timestampMs={joinRecord.get('createdAt')} />
+      </Comment.Metadata>
+    </Comment.Content>
+    </Comment>;
 }
 
 function LeaveNotice({users, leaveRecord}) {
