@@ -200,6 +200,8 @@ function JoinNotice({users, joinRecord}) {
       <Comment.Metadata>
         {userWhoLeft.get('displayName')} joined <ShowDate timestampMs={joinRecord.get('createdAt')} />
       </Comment.Metadata>
+      {/* Partial workaround for https://github.com/Semantic-Org/Semantic-UI-React/issues/1584 */}
+      <Comment.Text />
     </Comment.Content>
     </Comment>;
 }
@@ -217,7 +219,7 @@ function LeaveNotice({users, leaveRecord}) {
 }
 
 function Reply({currentUser, conversationId, reply, users}) {
-  function getReactionButton(reply, replyId, reactionId, label) {
+  function getReactionButton(reply, replyId, reactionId, label, icon) {
     return <ReactionButton 
       currentUserId={currentUser.uid}
       conversationId={conversationId}
@@ -226,20 +228,34 @@ function Reply({currentUser, conversationId, reply, users}) {
       reactingToEntityId={replyId}
       reactionId={reactionId}
       label={label}
+      icon={icon}
     />;
   }
 
   const replyId = reply.get('key');
-  return <div>
-    {users && 
-        <UserAvatar user={users.get(reply.get('authorId'))} />
+  const commentAuthor = users && users.get(reply.get('authorId'));
+
+  return <Comment as="li">
+    {commentAuthor && <Comment.Avatar src={commentAuthor.get('avatarUrl') || commentAuthor.get('photoURL')} />}
+    <Comment.Content>
+      {commentAuthor && 
+        <Comment.Author>
+          {commentAuthor.get('displayName')}
+        </Comment.Author>
       }
-      {reply.get('content')}
-      Written <ShowDate timestampMs={reply.get('createdAt')} />
-      {getReactionButton(reply, replyId, 'goodPoint', 'Good Point')}
-      {getReactionButton(reply, replyId, 'uncivil', 'Uncivil')}
-      {getReactionButton(reply, replyId, 'sourceRequested', 'Source Requested')}
-  </div>;  
+      <Comment.Metadata>
+        Written <ShowDate timestampMs={reply.get('createdAt')} />
+      </Comment.Metadata>
+      <Comment.Text>
+        {reply.get('content')}
+      </Comment.Text>
+      <Comment.Actions>
+        {getReactionButton(reply, replyId, 'goodPoint', 'Good Point', 'checkmark')}
+        {getReactionButton(reply, replyId, 'uncivil', 'Uncivil', 'warning circle')}
+        {getReactionButton(reply, replyId, 'sourceRequested', 'Source Requested', 'book')}
+      </Comment.Actions>
+    </Comment.Content>
+  </Comment>;  
 }
 
 @connect(

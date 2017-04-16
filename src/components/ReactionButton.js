@@ -1,11 +1,13 @@
 import React, {PureComponent} from 'react';
 import {firebaseConnect} from 'react-redux-firebase';
+import {Button} from 'semantic-ui-react';
 
 @firebaseConnect()
 class ReactionButton extends PureComponent {
   render() {
     const {
-      currentUserId, conversationId, reactingToName, reactingToEntity, reactingToEntityId, reactionId, label, firebase
+      currentUserId, conversationId, reactingToName, reactingToEntity, reactingToEntityId, reactionId, label, firebase,
+      icon
     } = this.props;
 
     const reaction = reactingToEntity.getIn(['reactions', reactionId]);
@@ -22,9 +24,11 @@ class ReactionButton extends PureComponent {
     };
 
     const existingReactionCount = reaction ? reaction.size : 0;
-    const text = `${(userReactionEntry ? 'Unset' : 'Set')} ${label} (${existingReactionCount})`;
+    const color = userReactionEntry ? 'blue' : undefined;
 
-    return <button onClick={handleClick}>{text}</button>;
+    return <Button onClick={handleClick} color={color} basic
+      content={label} icon={icon} label={{content: existingReactionCount, color}} 
+      />;
   }
 }
 
