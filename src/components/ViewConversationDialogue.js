@@ -254,7 +254,7 @@ class ReplyForm extends PureComponent {
       }
     };
 
-    const replyForm = this.props.replyForm || Map.of();
+    const replyForm = this.props.replyForm || Map();
 
     const START_CITE_CHAR = '[';
     const handleKeyDown = event => {

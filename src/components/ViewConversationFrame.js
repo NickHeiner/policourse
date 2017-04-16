@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
+import {Header, Menu} from 'semantic-ui-react';
+import './ViewConversationFrame.css';
 
 @firebaseConnect(['/conversations'])
 @connect(
@@ -29,21 +31,27 @@ class ViewConversationFrame extends PureComponent {
       return notFound;
     }
 
+    const currentPathname = this.props.router.getCurrentLocation().pathname;
+    const discussionPath = `/conversation/${this.props.routeParams.id}`;
+    const discussionActive = currentPathname === discussionPath;
+    const sourcesPath = `/conversation/${this.props.routeParams.id}/sources`;
+    const sourcesActive = currentPathname === sourcesPath;
+
     return <div>
-        <h3>{conversation.get('topic')}</h3>
+        <Header as="h3" textAlign="center">{conversation.get('topic')}</Header>
 
         {this.props.children}
 
-        <ul>
-          <li>
-            <Link to={`/conversation/${this.props.routeParams.id}`} activeClassName="active" onlyActiveOnIndex={true}>
+        <Menu tabular attached="bottom" as="ul" className="view-conversation-menu">
+          <Menu.Item as="li" name="Discussion" active={discussionActive} onClick={this.handleItemClick}>
+            <Link to={discussionPath} activeClassName="active" onlyActiveOnIndex={true}>
               Discussion
             </Link>
-          </li>
-          <li>
-            <Link to={`/conversation/${this.props.routeParams.id}/sources`} activeClassName="active">Sources</Link>
-          </li>
-        </ul>
+          </Menu.Item>
+          <Menu.Item as="li"name="Sources" active={sourcesActive} onClick={this.handleItemClick}>
+            <Link to={sourcesPath} activeClassName="active">Sources</Link>
+          </Menu.Item>
+        </Menu>
     </div>;
   }
 }
