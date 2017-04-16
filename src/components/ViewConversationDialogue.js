@@ -161,9 +161,9 @@ class ViewConversationDialogue extends PureComponent {
       
       {currentUserIsParticipant 
         ? <Link to={`/conversation/${this.props.params.id}/leave`}>
-          <button>Leave conversation</button>
+          <Button content="Leave conversation" icon="sign out" />
         </Link> 
-        : <button onClick={joinConversation}>Join conversation to share your thoughts</button>
+        : <Button onClick={joinConversation} icon="sign in" content="Join conversation to share your thoughts" />
       }
     </div>;
   }
