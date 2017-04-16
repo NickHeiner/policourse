@@ -152,7 +152,8 @@ class ViewConversationDialogue extends PureComponent {
   }
 
   @autobind
-  async addReply(replyFormData) {
+  async addReply(immutableReplyFormData) {
+    const replyFormData = immutableReplyFormData.toJS();
     const pushedReply = await this.props.firebase.push(`/conversations/${this.props.params.id}/replies`, {
       ...replyFormData,
       createdAt: this.props.firebase.database.ServerValue.TIMESTAMP,
