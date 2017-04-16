@@ -19,7 +19,7 @@ class LeaveConversation extends PureComponent {
         .push({
           userId: this.props.currentUser.uid,
           createdAt: this.props.firebase.database.ServerValue.TIMESTAMP,
-          reason: leaveFormData.reason
+          reason: leaveFormData.get('reason')
         });
 
       browserHistory.push('/');
