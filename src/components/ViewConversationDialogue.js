@@ -12,7 +12,7 @@ import moment from 'moment';
 import textareaCaret from 'textarea-caret';
 import _get from 'lodash.get';
 import classnames from 'classnames';
-import {Divider, Comment, Form, Button} from 'semantic-ui-react';
+import {Header, Divider, Comment, Form, Button, Card, Image} from 'semantic-ui-react';
 
 const getUrlsOfString = _memoize(str => {
   if (!str) {
@@ -131,12 +131,27 @@ class ViewConversationDialogue extends PureComponent {
       }
       {users && participants &&
         <div>
-          <h4>Participants</h4>
-          <ul>
+          <Divider />
+          <Header as="h3" textAlign="center">Participants</Header>
+          <ul className="semantic-list">
             {
               participants
-                .map(participantId => 
-                  <li key={participantId}><UserAvatar user={users.get(participantId)} /></li>)
+                .map(participantId => {
+                  const user = users.get(participantId);
+                  return <li key={participantId}>
+                    {/* Card has a fixed width of 290px, and if our image is smaller, it wil
+                        look bad. We'll work around that by manually setting the width.
+                    */}
+                    <Card raised centered style={{width: '150px'}}>
+                      <Image src={user.get('avatarUrl') || user.get('photoURL')} size="small" />
+                      <Card.Content>
+                        <Card.Header style={{textAlign: 'center'}}>
+                          {user.get('displayName')}
+                        </Card.Header>
+                      </Card.Content>
+                    </Card>
+                  </li>;
+                })
                 .toList()
                 .toJS()
             }
