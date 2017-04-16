@@ -53,7 +53,7 @@ class NewConversation extends PureComponent {
       const newConversation = await this.props.firebase.push('/conversations', {
         hostId: this.props.currentUser.uid,
         createdAt: this.props.firebase.database.ServerValue.TIMESTAMP,
-        ...conversation
+        ...conversation.toJS()
       });
       await this.props.firebase.push(`/conversations/${newConversation.key}/joinRecords`, {
         userId: this.props.currentUser.uid,
