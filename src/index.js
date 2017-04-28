@@ -31,7 +31,17 @@ const firebaseConfig = {
   messagingSenderId: '603341743697'
 };
 
-function uiReducer(state = fromJS({}), action = {}) {
+const initialUiState = fromJS({
+  viewConversation: {
+    replyForm: {
+      textAreaCaretPosition: null,
+      showCiteSuggestions: false,
+      selectedCiteIndex: null
+    }
+  },
+  modal: null
+});
+function uiReducer(state = initialUiState, action = {}) {
   switch (action.type) {
   case 'TEXTAREA_CARET_POSITION_UPDATE':
     return state.setIn(['viewConversation', 'replyForm', 'textAreaCaretPosition'], action.payload);
