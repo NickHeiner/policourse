@@ -3,7 +3,7 @@ import {Field, reduxForm} from 'redux-form/immutable';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {Form, Button, Header} from 'semantic-ui-react';
+import {Form, Button, Header, Label, FormField} from 'semantic-ui-react';
 import './NewConversation.css';
 import _get from 'lodash.get'; 
 
@@ -24,15 +24,13 @@ class NewConversationForm extends PureComponent {
   render() {
     return <Form onSubmit={this.props.handleSubmit}>
       <Header as="h2" textAlign="center">What would you like to talk about?</Header>
-      <div>
-        <label htmlFor="topic">Topic</label>
-        <Field 
-          name="topic" 
-          component={renderField} 
-          type="text" 
-          placeholder="Should Milo Yiannopoulos be allowed to speak on college campuses?" 
-        />
-      </div>
+      <Label htmlFor="topic">Topic</Label>
+      <Field 
+        name="topic" 
+        component={renderField} 
+        type="text" 
+        placeholder="Should Milo Yiannopoulos be allowed to speak on college campuses?" 
+      />
       <div className="start-button-wrapper">
         <Button primary type="submit" disabled={this.props.pristine || this.props.invalid}>Start Conversation</Button>
       </div>

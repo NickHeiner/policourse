@@ -22,6 +22,7 @@ class App extends PureComponent {
   }
 }
 
+// What is the difference between getting 'profile' and 'auth'?
 @connect(
   ({firebase}) => ({profile: firebase.get('profile')})
 )

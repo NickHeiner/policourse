@@ -1,7 +1,11 @@
 import React from 'react';
 import {Iterable} from 'immutable';
+import _ from 'lodash';
 
-export const ensureNativeJSValue = state => Iterable.isIterable(state) ? state.toJS() : state;
+export const ensureNativeJSValue = 
+  state => state 
+    ? Iterable.isIterable(state) ? state.toJS() : _.mapValues(state, ensureNativeJSValue) 
+    : state;
 
 export function toJS(WrappedComponent) {
   function ToJSWrapper(wrappedComponentProps) {
