@@ -3,8 +3,13 @@ import {connect} from 'react-redux';
 import {toJS} from './utils';
 import {Link} from 'react-router';
 import {getFirebase} from 'react-redux-firebase';
-import {Header} from 'semantic-ui-react';
+import {Header, Modal, ModalHeader, ModalActions, ModalContent} from 'semantic-ui-react';
 
+@connect(
+  state => ({
+    modal: state.ui.get('modal')
+  })
+)
 class App extends PureComponent {
   render() {
     return (
@@ -17,8 +22,30 @@ class App extends PureComponent {
             <SignedInMessage />
             <AuthButton />
           </div>
+          <UnauthorizedCreateConversationModal open={Boolean(this.props.modal)} />
         </div>
     );
+  }
+}
+
+@connect(
+  null,
+  dispatch => ({
+    dismissModal() {
+      dispatch({
+        type: 'DISMISS_MODAL'
+      });
+    }
+  })
+)
+class UnauthorizedCreateConversationModal extends PureComponent {
+  render() {
+    return <Modal open={this.props.open} onClose={this.props.dismissModal}>
+      <ModalHeader>You must be signed in to create a conversation.</ModalHeader>
+      <ModalContent>
+        <ModalActions><AuthButton /></ModalActions>
+      </ModalContent>
+    </Modal>;
   }
 }
 

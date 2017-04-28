@@ -53,6 +53,10 @@ function uiReducer(state = fromJS({}), action = {}) {
       const currIndex = state.getIn(selectedCiteIndexPath);
       return state.setIn(selectedCiteIndexPath, Math.max(0, currIndex - 1));
     })();
+  case 'UNAUTH_USER_ATTEMPT_CREATE_CONVERSATION':
+    return state.set('modal', 'UNAUTH_USER_ATTEMPT_CREATE_CONVERSATION');
+  case 'DISMISS_MODAL':
+    return state.set('modal', null);
   default:
     return state;
   }
