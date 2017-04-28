@@ -42,6 +42,10 @@ a.active {
   width: 90%;
 }
 
+.centered-text {
+  text-align: center;
+}
+
 .new-button {
   position: fixed;
   bottom: 10px;

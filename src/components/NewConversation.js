@@ -3,7 +3,7 @@ import {Field, reduxForm} from 'redux-form/immutable';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {Form, Button, Header, Label, FormField} from 'semantic-ui-react';
+import {Form, Button, Header, Label, Message, Icon} from 'semantic-ui-react';
 import './NewConversation.css';
 import _get from 'lodash.get'; 
 
@@ -41,7 +41,7 @@ class NewConversationForm extends PureComponent {
 @firebaseConnect()
 @connect(
   ({firebase}) => ({
-    profile: firebase.get('profile'),
+    isInitializing: firebase.get('isInitializing'),
     currentUser: firebase.get('auth')
   })
 )
@@ -60,6 +60,12 @@ class NewConversation extends PureComponent {
 
       browserHistory.push(`/conversation/${newConversation.key}`);
     };
+
+    if (!(this.props.isInitializing || this.props.currentUser)) {
+      return <Message warning={true} className="centered-text">
+        <Icon name="warning circle" /> You must be signed in to create a new conversation.
+      </Message>;
+    }
 
     return <NewConversationForm onSubmit={addConversation} />;
   }
