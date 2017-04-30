@@ -1,6 +1,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
+import * as ActionTypes from './redux/ActionTypes';
 import {reducer as formReducer} from 'redux-form/immutable';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import NoMatch from './components/NoMatch';
@@ -43,29 +44,29 @@ const initialUiState = fromJS({
 });
 function uiReducer(state = initialUiState, action = {}) {
   switch (action.type) {
-  case 'TEXTAREA_CARET_POSITION_UPDATE':
+  case ActionTypes.TEXTAREA_CARET_POSITION_UPDATE:
     return state.setIn(['viewConversation', 'replyForm', 'textAreaCaretPosition'], action.payload);
-  case 'START_TYPING_CITE':
+  case ActionTypes.START_TYPING_CITE:
     return state
       .setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], true)
       .setIn(['viewConversation', 'replyForm', 'selectedCiteIndex'], 0);
-  case 'STOP_TYPING_CITE':
+  case ActionTypes.STOP_TYPING_CITE:
     return state.setIn(['viewConversation', 'replyForm', 'showCiteSuggestions'], false);
-  case 'CITE_SUGGESTION_SELECTED_INCREMENT':
+  case ActionTypes.CITE_SUGGESTION_SELECTED_INCREMENT:
     return (() => {
       const selectedCiteIndexPath = ['viewConversation', 'replyForm', 'selectedCiteIndex'];
       const currIndex = state.getIn(selectedCiteIndexPath);
       return state.setIn(selectedCiteIndexPath, Math.min(action.payload.sourceCount - 1, currIndex + 1));
     })();
-  case 'CITE_SUGGESTION_SELECTED_DECREMENT':
+  case ActionTypes.CITE_SUGGESTION_SELECTED_DECREMENT:
     return (() => {
       const selectedCiteIndexPath = ['viewConversation', 'replyForm', 'selectedCiteIndex'];
       const currIndex = state.getIn(selectedCiteIndexPath);
       return state.setIn(selectedCiteIndexPath, Math.max(0, currIndex - 1));
     })();
-  case 'UNAUTH_USER_ATTEMPT_CREATE_CONVERSATION':
+  case ActionTypes.UNAUTH_USER_ATTEMPT_CREATE_CONVERSATION:
     return state.set('modal', 'UNAUTH_USER_ATTEMPT_CREATE_CONVERSATION');
-  case 'DISMISS_MODAL':
+  case ActionTypes.DISMISS_MODAL:
     return state.set('modal', null);
   default:
     return state;
@@ -82,7 +83,7 @@ const rootReducer = combineReducers({
       switch (action.type) {
       case '@@reactReduxFirebase/SET': 
         return action.requested ? undefined : state;
-      case 'CHOOSE_CITE': 
+      case ActionTypes.CHOOSE_CITE: 
         return {
           ...state,
           values: {
