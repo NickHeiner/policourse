@@ -29,7 +29,7 @@ class LeaveConversation extends PureComponent {
 
     const stayButton = <LinkButton 
       to={`/conversation/${this.props.params.id}`} 
-      icon={<Icon name="add user" size="huge" />} label="Stay" positive={true} />;
+      icon={<Icon name="add user" size="huge" />} label="Stay" positive={true} labelPosition="right" />;
 
     return <LeaveConversationForm onSubmit={leaveConversation} stayButton={stayButton} />;
   }
@@ -67,9 +67,10 @@ class LeaveConversationForm extends PureComponent {
           </div>
         </div>
       </div>
-      <ButtonGroup fluid={true}>
+      <ButtonGroup fluid={true} widths="two">
         <Button type="submit" 
-          disabled={pristine} icon={<Icon name="remove user" size="huge" />} label="Leave" negative={true} />
+          disabled={pristine} icon={<Icon name="remove user" size="huge" />} label="Leave" negative={true} 
+          labelPosition="left" />
         {this.props.stayButton}
       </ButtonGroup>
     </Form>;
