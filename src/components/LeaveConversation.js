@@ -3,7 +3,7 @@ import {browserHistory} from 'react-router';
 import {Field, reduxForm} from 'redux-form/immutable';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
-import {Form, Button, ButtonGroup} from 'semantic-ui-react';
+import {Form, Button, ButtonGroup, Icon} from 'semantic-ui-react';
 import LinkButton from './LinkButton';
 
 @firebaseConnect()
@@ -27,7 +27,9 @@ class LeaveConversation extends PureComponent {
       browserHistory.push('/');
     };
 
-    const stayButton = <LinkButton to={`/conversation/${this.props.params.id}`}>Stay</LinkButton>;
+    const stayButton = <LinkButton 
+      to={`/conversation/${this.props.params.id}`} 
+      icon={<Icon name="add user" size="huge" />} label="Stay" positive={true} />;
 
     return <LeaveConversationForm onSubmit={leaveConversation} stayButton={stayButton} />;
   }
@@ -66,7 +68,8 @@ class LeaveConversationForm extends PureComponent {
         </div>
       </div>
       <ButtonGroup fluid={true}>
-        <Button type="submit" disabled={pristine}>Leave</Button>
+        <Button type="submit" 
+          disabled={pristine} icon={<Icon name="remove user" size="huge" />} label="Leave" negative={true} />
         {this.props.stayButton}
       </ButtonGroup>
     </Form>;
