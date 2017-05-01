@@ -1,8 +1,10 @@
 import React, {PureComponent} from 'react';
-import {Link, browserHistory} from 'react-router';
+import {browserHistory} from 'react-router';
 import {Field, reduxForm} from 'redux-form/immutable';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
+import {Form, Button, ButtonGroup} from 'semantic-ui-react';
+import LinkButton from './LinkButton';
 
 @firebaseConnect()
 @connect(
@@ -25,10 +27,9 @@ class LeaveConversation extends PureComponent {
       browserHistory.push('/');
     };
 
-    return <div>
-        <LeaveConversationForm onSubmit={leaveConversation} />
-        <Link to={`/conversation/${this.props.params.id}`}><button>Stay</button></Link>
-    </div>;
+    const stayButton = <LinkButton to={`/conversation/${this.props.params.id}`}>Stay</LinkButton>;
+
+    return <LeaveConversationForm onSubmit={leaveConversation} stayButton={stayButton} />;
   }
 }
 
@@ -37,21 +38,38 @@ class LeaveConversation extends PureComponent {
 class LeaveConversationForm extends PureComponent {
   render() {
     const {handleSubmit, pristine} = this.props;
-    return <form onSubmit={handleSubmit}>
-      <label>
-        <Field name="reason" component="input" type="radio" value="agreeToDisagree"/>
-        Let's agree to disagree
-      </label>
-      <label>
-        <Field name="reason" component="input" type="radio" value="uncivil"/>
-        Other participants are being uncivil
-      </label>
-      <label>
-        <Field name="reason" component="input" type="radio" value="nothingLeftToAdd"/>
-        I have nothing left to add
-      </label>
-      <button type="submit" disabled={pristine}>Leave</button>
-    </form>;
+    return <Form onSubmit={handleSubmit}>
+      <div className="three fields">
+        <div className="field">
+          <div className="ui radio">
+            <Field name="reason" component="input" type="radio" value="agreeToDisagree" />
+            <label>
+              Let's agree to disagree
+            </label>
+          </div>
+        </div>
+        <div className="field">
+          <div className="ui radio">
+            <Field name="reason" component="input" type="radio" value="uncivil" />
+            <label>
+              Other participants are being uncivil
+            </label>
+          </div>
+        </div>
+        <div className="field">
+          <div className="ui radio">
+            <Field name="reason" component="input" type="radio" value="nothingLeftToAdd" />
+            <label>
+              I have nothing left to add
+            </label>
+          </div>
+        </div>
+      </div>
+      <ButtonGroup fluid={true}>
+        <Button type="submit" disabled={pristine}>Leave</Button>
+        {this.props.stayButton}
+      </ButtonGroup>
+    </Form>;
   }
 }
 
