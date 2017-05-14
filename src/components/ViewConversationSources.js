@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
 import ReactionButton from './ReactionButton';
-import {Header, Card, Button} from 'semantic-ui-react';
+import {Header, Card} from 'semantic-ui-react';
 
 @firebaseConnect(['/conversations'])
 @connect(
