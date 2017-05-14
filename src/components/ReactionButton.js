@@ -7,7 +7,7 @@ class ReactionButton extends PureComponent {
   render() {
     const {
       currentUserId, conversationId, reactingToName, reactingToEntity, reactingToEntityId, reactionId, label, firebase,
-      icon
+      icon, ...extraProps
     } = this.props;
 
     const reaction = reactingToEntity.getIn(['reactions', reactionId]);
@@ -28,7 +28,7 @@ class ReactionButton extends PureComponent {
 
     return <Button onClick={handleClick} color={color} basic
       content={label} icon={icon} label={{content: existingReactionCount, color}} 
-      />;
+      {...extraProps} />;
   }
 }
 

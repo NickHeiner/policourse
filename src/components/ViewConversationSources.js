@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
 import ReactionButton from './ReactionButton';
+import {Header, Card, Button} from 'semantic-ui-react';
 
 @firebaseConnect(['/conversations'])
 @connect(
@@ -16,7 +17,8 @@ class ViewConversationSources extends PureComponent {
     const sources = conversations.getIn([this.props.params.id, 'sources']);
     let body;
 
-    function getReactionButton(source, sourceId, reactionId, label) {
+    function getReactionButton(source, sourceId, reactionId, label, negativeOrPositive) {
+      const mood = {[negativeOrPositive]: true};
       return <ReactionButton 
         currentUserId={currentUser.uid}
         conversationId={params.id}
@@ -25,29 +27,36 @@ class ViewConversationSources extends PureComponent {
         reactingToEntityId={sourceId}
         reactionId={reactionId}
         label={label}
+        {...mood}
       />;
     }
 
     if (!sources || !sources.size) {
       body = <p>No sources have been added to this conversation yet.</p>;
     } else {
-      body = <ul>
+      body = <Card.Group>
         {
           sources.map((source, key) => 
-            <li key={key}>
-              <a href={source.get('href')}>{source.get('href')}</a>
-              {getReactionButton(source, key, 'goodSource', 'Good Source')}
-              {getReactionButton(source, key, 'badSource', 'Questionable Source')}
-            </li>
+            <Card key={key} style={{width: 'inherit'}}>
+              <Card.Content>
+                <Card.Header>
+                  <a href={source.get('href')}>{source.get('href')}</a>
+                </Card.Header>
+              </Card.Content>
+              <Card.Content>
+                {getReactionButton(source, key, 'goodSource', 'Trustworthy', 'positive')}
+                {getReactionButton(source, key, 'badSource', 'Questionable', 'negative')}
+              </Card.Content>
+            </Card>
           )
           .toList()
           .toJS()
         }
-      </ul>;
+      </Card.Group>;
     }
 
     return <div>
-      <h3>Sources</h3>
+      <Header>Sources</Header>
       {body}
     </div>;
   }
