@@ -115,7 +115,7 @@ ReactDOM.render(
           <Route path=":id" component={ViewConversationFrame}>
             <IndexRoute component={ViewConversationDialogue} />
             <Route path="sources" component={ViewConversationSources} />
-            <Route path="leave" component={LeaveConversation} />
+            <Route path="leave" component={LeaveConversation} showConversationNav={false} />
           </Route>
         </Route>
       </Route>

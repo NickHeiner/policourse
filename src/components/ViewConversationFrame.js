@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import {Header, Menu} from 'semantic-ui-react';
 import './ViewConversationFrame.css';
+import _ from 'lodash';
 
 @firebaseConnect(['/conversations'])
 @connect(
@@ -42,16 +43,18 @@ class ViewConversationFrame extends PureComponent {
 
         {this.props.children}
 
-        <Menu tabular attached="bottom" as="ul" className="view-conversation-menu">
-          <Menu.Item as="li" name="Discussion" active={discussionActive} onClick={this.handleItemClick}>
-            <Link to={discussionPath} activeClassName="active" onlyActiveOnIndex={true}>
-              Discussion
-            </Link>
-          </Menu.Item>
-          <Menu.Item as="li"name="Sources" active={sourcesActive} onClick={this.handleItemClick}>
-            <Link to={sourcesPath} activeClassName="active">Sources</Link>
-          </Menu.Item>
-        </Menu>
+        {_.get(_.last(this.props.routes), 'showConversationNav', true) && 
+          <Menu tabular attached="bottom" as="ul" className="view-conversation-menu">
+            <Menu.Item as="li" name="Discussion" active={discussionActive} onClick={this.handleItemClick}>
+              <Link to={discussionPath} activeClassName="active" onlyActiveOnIndex={true}>
+                Discussion
+              </Link>
+            </Menu.Item>
+            <Menu.Item as="li"name="Sources" active={sourcesActive} onClick={this.handleItemClick}>
+              <Link to={sourcesPath} activeClassName="active">Sources</Link>
+            </Menu.Item>
+          </Menu>
+        }
     </div>;
   }
 }
