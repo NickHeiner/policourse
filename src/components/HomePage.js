@@ -31,7 +31,7 @@ class HomePage extends PureComponent {
       }
 
       return <PlusButton onClick={this.props.onUnauthenticatedUserAttemptToCreateConversation} />;
-    }
+    };
     return <div>
         <ConversationList />
         <div className="new-button">{getAddButton()}</div>
@@ -39,6 +39,6 @@ class HomePage extends PureComponent {
   }
 }
 
-const PlusButton = props => <Button icon="plus" {...props} />
+const PlusButton = props => <Button icon="plus" {...props} />;
 
 export default HomePage;
