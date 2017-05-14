@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {toJS} from './utils';
 import {Link} from 'react-router';
 import {getFirebase} from 'react-redux-firebase';
-import {Header, Modal, ModalHeader, ModalActions, ModalContent} from 'semantic-ui-react';
+import {Header, Modal, ModalHeader, ModalActions, ModalContent, Image} from 'semantic-ui-react';
 
 @connect(
   state => ({
@@ -12,17 +12,30 @@ import {Header, Modal, ModalHeader, ModalActions, ModalContent} from 'semantic-u
 )
 class App extends PureComponent {
   render() {
+    let modal;
+
+    switch (this.props.modal) {
+    case 'UNAUTH_USER_ATTEMPT_CREATE_CONVERSATION':
+      modal = <UnauthorizedCreateConversationModal />;
+      break;
+    case 'SIGNED_IN_MODAL':
+      modal = <SignedInModal />;
+      break;
+    default:
+      modal = null;
+    }
+
     return (
         <div>
           <div className="app-header">
             <Header as="h1" className="centered"><Link to="/">PoliCourse</Link></Header>
+            <SignedInMessage />
           </div>
           <div className="centered">
             {this.props.children}
-            <SignedInMessage />
             <AuthButton />
           </div>
-          <UnauthorizedCreateConversationModal open={Boolean(this.props.modal)} />
+          {modal}
         </div>
     );
   }
@@ -40,7 +53,7 @@ class App extends PureComponent {
 )
 class UnauthorizedCreateConversationModal extends PureComponent {
   render() {
-    return <Modal open={this.props.open} onClose={this.props.dismissModal}>
+    return <Modal open={true} onClose={this.props.dismissModal}>
       <ModalHeader>You must be signed in to create a conversation.</ModalHeader>
       <ModalContent>
         <ModalActions><AuthButton /></ModalActions>
@@ -49,7 +62,6 @@ class UnauthorizedCreateConversationModal extends PureComponent {
   }
 }
 
-// What is the difference between getting 'profile' and 'auth'?
 @connect(
   ({firebase}) => ({profile: firebase.get('profile')})
 )
@@ -57,7 +69,39 @@ class UnauthorizedCreateConversationModal extends PureComponent {
 class SignedInMessage extends PureComponent {
   render() {
     const {profile} = this.props;
-    return profile ? <span>Logged in as {profile.displayName}</span> : null;
+    return profile 
+      ? <Image src={profile.avatarUrl} 
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px'
+          }} alt={`Profile picture for ${profile.displayName}`} size="mini" avatar className="signed-in-message" /> 
+      : null;
+  }
+}
+
+@connect(
+  ({firebase}) => ({profile: firebase.get('profile')}),
+  dispatch => ({
+    dismissModal() {
+      dispatch({
+        type: 'DISMISS_MODAL'
+      });
+    }
+  })
+)
+class SignedInModal extends PureComponent {
+  render() {
+    const {profile, dismissModal} = this.props;
+    return profile ? <Modal open={true} onClose={dismissModal}>
+      <ModalHeader>Signed in as {profile.get('displayName')}</ModalHeader>
+      <ModalContent image>
+        <Image src={profile.get('avatarUrl')} 
+          wrapped size="small" shape="circular"
+          alt={`Profile picture for ${profile.get('displayName')}`} className="signed-in-message" />
+        <ModalActions><AuthButton /></ModalActions>
+      </ModalContent>
+    </Modal> : null;
   }
 }
 
@@ -73,11 +117,12 @@ class SignedInMessage extends PureComponent {
       }
     }})
 )
-@toJS
 class AuthButton extends PureComponent {
+  handleClick = () => this.props.onClick(!this.props.profile)
+
   render() {
-    const {profile, onClick} = this.props;
-    return <button onClick={() => onClick(!profile)}>
+    const {profile} = this.props;
+    return <button onClick={this.handleClick}>
       {profile ? 'Sign out' : 'Sign in'}
     </button>;
   }
