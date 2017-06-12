@@ -10,6 +10,7 @@
     "lodash.get": "^4.4.2",
     "moment": "^2.18.1",
     "react": "^15.4.2",
+    "react-addons-perf": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.3",
     "react-redux-firebase": "^1.4.0-beta.4",
@@ -18,6 +19,8 @@
     "redux-devtools-extension": "^2.13.0",
     "redux-form": "^6.6.1",
     "redux-logger": "^3.0.1",
+    "redux-perf-middleware": "^1.2.2",
+    "reselect": "^3.0.1",
     "semantic-ui-css": "^2.2.10",
     "semantic-ui-react": "^0.67.2",
     "textarea-caret": "^3.0.2"
