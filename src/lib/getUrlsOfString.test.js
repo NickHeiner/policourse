@@ -35,16 +35,19 @@ describe('incomplete URL', () => {
   test('no hostname', () => {
     expect(getUrlsOfString('http://wwww')).toEqual([]);
   });
-
-  test('no top-level domain', () => {
-    expect(getUrlsOfString('http://www.google')).toEqual([]);
-  });
 });
 
 test('http URL with content afterwards', () => {
   expect(getUrlsOfString('http://my.news.com is also a useful source')).toEqual([{
     index: 0,
     match: 'http://my.news.com'
+  }]);
+});
+
+test('Subdomain is optional', () => {
+  expect(getUrlsOfString('http://news.com')).toEqual([{
+    index: 0,
+    match: 'http://news.com'
   }]);
 });
 

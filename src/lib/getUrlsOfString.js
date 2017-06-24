@@ -4,7 +4,7 @@ import {memoize as _memoize} from 'lodash';
 // Adapted from https://gist.github.com/hansifer/32bcba48c24621c2da78
 // This should be further adapted to match what we are looking for.
 // eslint-disable-next-line no-useless-escape,max-len
-const urlRegex = /(https?:)\/\/([^\/?#\. ]+)\.([^?#\. ]+)\.([^?# ]+)(\?([^#]. ))?(#(.*))?/ig;
+const urlRegex = /(https?:)\/\/(([^\/?#\. ]+)\.)?([^?#\. ]+)\.([^?# ]+)(\?([^#]. ))?(#(.*))?/ig;
 
 export default _memoize(str => {
   if (!str) {
