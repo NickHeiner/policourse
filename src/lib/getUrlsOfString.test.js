@@ -39,5 +39,12 @@ describe('incomplete URL', () => {
   test('no top-level domain', () => {
     expect(getUrlsOfString('http://www.google')).toEqual([]);
   });
-})
+});
+
+test('http URL with content afterwards', () => {
+  expect(getUrlsOfString('http://my.news.com is also a useful source')).toEqual([{
+    index: 0,
+    match: 'http://my.news.com'
+  }]);
+});
 
