@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
 import autobind from 'autobind-decorator';
 import {Field, reduxForm, formValueSelector} from 'redux-form/immutable';
-import {toJS, getUrlRegex} from '../utils';
+import {toJS} from '../utils';
+import getUrlsOfString from '../lib/getUrlsOfString';
 import {Map} from 'immutable';
 import {firebaseConnect} from 'react-redux-firebase';
 import {connect} from 'react-redux';
@@ -13,24 +14,6 @@ import textareaCaret from 'textarea-caret';
 import _get from 'lodash.get';
 import classnames from 'classnames';
 import {Header, Divider, Comment, Form, Button, Card, Image} from 'semantic-ui-react';
-
-const getUrlsOfString = _memoize(str => {
-  if (!str) {
-    return [];
-  }
-
-  let mostRecentMatch;
-  const matches = [];
-  const urlRegex = getUrlRegex();
-  // eslint-disable-next-line no-cond-assign
-  while ((mostRecentMatch = urlRegex.exec(str)) !== null) {
-    matches.push({
-      index: mostRecentMatch.index,
-      match: mostRecentMatch[0]
-    });
-  }
-  return matches;
-});
 
 const getCitesOfString = _memoize(str => {
   if (!str) {
