@@ -51,3 +51,9 @@ test('Subdomain is optional', () => {
   }]);
 });
 
+test('URL with hash', () => {
+  expect(getUrlsOfString('http://facebook.github.io/jest/docs/en/troubleshooting.html#content after')).toEqual([{
+    index: 0,
+    match: 'http://facebook.github.io/jest/docs/en/troubleshooting.html#content'
+  }]);
+});
