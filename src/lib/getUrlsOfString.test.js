@@ -8,7 +8,7 @@ test('String with non-url content', () => {
   expect(getUrlsOfString('1600 Pennsylvania Ave NW Washington DC 22202')).toEqual([]);
 });
 
-test('Link with other content', () => {
+test('URL with other content', () => {
   expect(getUrlsOfString('Check this out: https://www.nytimes.com/2017/05/09/us/politics/james-comey-fired-fbi.html'))
     .toEqual([{
       index: 16,
@@ -16,17 +16,28 @@ test('Link with other content', () => {
     }]);
 });
 
-test('FTP link', () => {
+test('FTP URL', () => {
   expect(getUrlsOfString('ftp://upload.com')).toEqual([]);
 });
 
-test('http link', () => {
-  expect(getUrlsOfString('http://news.com')).toEqual([{
+test('http URL', () => {
+  expect(getUrlsOfString('http://my.news.com')).toEqual([{
     index: 0,
-    match: 'http://news.com'
+    match: 'http://my.news.com'
   }]);
 });
 
-test('http link with no domain', () => {
-  expect(getUrlsOfString('http://')).toEqual([]);
-});
+describe('incomplete URL', () => {
+  test('no subdomain', () => {
+    expect(getUrlsOfString('http://')).toEqual([]);
+  });
+
+  test('no hostname', () => {
+    expect(getUrlsOfString('http://wwww')).toEqual([]);
+  });
+
+  test('no top-level domain', () => {
+    expect(getUrlsOfString('http://www.google')).toEqual([]);
+  });
+})
+
