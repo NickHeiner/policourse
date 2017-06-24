@@ -3,3 +3,56 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+a.active {
+  font-weight: bold;
+}
+
+.reply-form {
+  position: relative;
+}
+
+.cite-suggestions {
+  position: absolute;
+  background: red;
+}
+
+.cite-suggestions li.selected {
+  background: blue;
+}
+
+.app-header {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: grey;
+  margin-bottom: 10px;
+}
+
+.app-header a {
+  color: black;
+}
+
+.app-header h1 {
+  width: 100%;
+}
+
+.centered {
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.new-button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+ul.semantic-list {
+  list-style-type: none;
+  padding-left: 0px;
+}

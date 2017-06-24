@@ -3,8 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "autobind-decorator": "^1.3.4",
+    "classnames": "^2.2.5",
+    "immutable": "^3.8.1",
+    "lodash": "^4.17.4",
+    "lodash.get": "^4.4.2",
+    "moment": "^2.18.1",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.3",
+    "react-redux-firebase": "^1.4.0-beta.4",
+    "react-router": "^3.0.3",
+    "redux": "^3.6.0",
+    "redux-devtools-extension": "^2.13.0",
+    "redux-form": "^6.6.1",
+    "redux-logger": "^3.0.1",
+    "semantic-ui-css": "^2.2.10",
+    "semantic-ui-react": "^0.67.2",
+    "textarea-caret": "^3.0.2"
   },
   "devDependencies": {
     "autoprefixer": "6.7.2",
@@ -12,6 +28,7 @@
     "babel-eslint": "7.1.1",
     "babel-jest": "18.0.0",
     "babel-loader": "6.2.10",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-preset-react-app": "^2.2.0",
     "babel-runtime": "^6.20.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
@@ -35,6 +52,7 @@
     "http-proxy-middleware": "0.17.3",
     "jest": "18.1.0",
     "json-loader": "0.5.4",
+    "npm-run-all": "^4.0.2",
     "object-assign": "4.1.1",
     "postcss-loader": "1.2.2",
     "promise": "7.1.1",
@@ -49,6 +67,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "ci-test": "CI=true npm-run-all test build",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
@@ -78,6 +97,9 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      "transform-decorators-legacy"
     ]
   },
   "eslintConfig": {
@@ -93,11 +115,20 @@
       "no-extra-semi": "warn",
       "no-irregular-whitespace": "error",
       "no-unsafe-finally": "warn",
-      "curly": "error",
+      "curly": "warn",
       "no-case-declarations": "error",
       "no-else-return": "warn",
       "no-implicit-coercion": "error",
-      "no-magic-numbers": "warn",
+      "no-magic-numbers": [
+        "warn",
+        {
+          "ignoreArrayIndexes": true,
+          "ignore": [
+            0,
+            1
+          ]
+        }
+      ],
       "no-multi-spaces": "warn",
       "no-param-reassign": "warn",
       "no-return-assign": "error",
@@ -116,14 +147,30 @@
       "comma-style": "warn",
       "computed-property-spacing": "warn",
       "func-call-spacing": "warn",
-      "id-blacklist": ["warn", "data", "temp", "tmp"],
-      "indent": ["warn", 2],
+      "id-blacklist": [
+        "warn",
+        "data",
+        "temp",
+        "tmp"
+      ],
+      "indent": [
+        "warn",
+        2
+      ],
       "jsx-quotes": "warn",
       "key-spacing": "warn",
       "keyword-spacing": "warn",
-      "max-len": ["warn", 120],
+      "max-len": [
+        "warn",
+        120
+      ],
       "no-lonely-if": "warn",
-      "no-multiple-empty-lines": ["warn", {"max": 1}],
+      "no-multiple-empty-lines": [
+        "warn",
+        {
+          "max": 1
+        }
+      ],
       "no-unneeded-ternary": "warn",
       "object-curly-spacing": "warn",
       "operator-linebreak": "warn",
@@ -131,23 +178,41 @@
         "error",
         "as-needed"
       ],
-      "quotes": ["warn", "single", {"avoidEscape": true}],
+      "quotes": [
+        "warn",
+        "single",
+        {
+          "avoidEscape": true
+        }
+      ],
       "semi": [
         "warn",
         "always"
       ],
       "semi-spacing": "warn",
       "space-before-blocks": "warn",
-      "space-before-function-paren": ["warn", "never"],
+      "space-before-function-paren": [
+        "warn",
+        "never"
+      ],
       "space-in-parens": "warn",
       "space-infix-ops": "warn",
       "space-unary-ops": "warn",
       "spaced-comment": "warn",
       "template-tag-spacing": "warn",
       "arrow-body-style": "warn",
-      "arrow-parens": ["warn", "as-needed"],
+      "arrow-parens": [
+        "warn",
+        "as-needed"
+      ],
       "arrow-spacing": "warn",
-      "generator-star-spacing": ["warn", {"before": false, "after": true}],
+      "generator-star-spacing": [
+        "warn",
+        {
+          "before": false,
+          "after": true
+        }
+      ],
       "no-class-assign": "error",
       "no-var": "error",
       "object-shorthand": "warn",
@@ -159,7 +224,13 @@
       "prefer-template": "warn",
       "template-curly-spacing": "warn",
       "no-duplicate-imports": "error",
-      "yield-star-spacing": ["warn", {"before": false, "after": true}]
+      "yield-star-spacing": [
+        "warn",
+        {
+          "before": false,
+          "after": true
+        }
+      ]
     }
   }
 }
