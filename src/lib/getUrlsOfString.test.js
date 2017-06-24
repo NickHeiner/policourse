@@ -17,14 +17,16 @@ test('Link with other content', () => {
 });
 
 test('FTP link', () => {
-  expect(getUrlsOfString('ftp://upload.com'))
-    .toEqual([]);
+  expect(getUrlsOfString('ftp://upload.com')).toEqual([]);
 });
 
 test('http link', () => {
-  expect(getUrlsOfString('http://news.com'))
-    .toEqual([{
-      index: 0,
-      match: 'http://news.com'
-    }]);
+  expect(getUrlsOfString('http://news.com')).toEqual([{
+    index: 0,
+    match: 'http://news.com'
+  }]);
+});
+
+test('http link with no domain', () => {
+  expect(getUrlsOfString('http://')).toEqual([]);
 });
