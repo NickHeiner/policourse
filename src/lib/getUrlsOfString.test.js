@@ -9,9 +9,9 @@ test('String with non-url content', () => {
 });
 
 test('Link with other content', () => {
-  expect(getUrlsOfString('Check this out https://www.nytimes.com/2017/05/09/us/politics/james-comey-fired-fbi.html'))
+  expect(getUrlsOfString('Check this out: https://www.nytimes.com/2017/05/09/us/politics/james-comey-fired-fbi.html'))
     .toEqual([{
-      index: 15,
+      index: 16,
       match: 'https://www.nytimes.com/2017/05/09/us/politics/james-comey-fired-fbi.html'
     }]);
 });
@@ -19,4 +19,12 @@ test('Link with other content', () => {
 test('FTP link', () => {
   expect(getUrlsOfString('ftp://upload.com'))
     .toEqual([]);
+});
+
+test('http link', () => {
+  expect(getUrlsOfString('http://news.com'))
+    .toEqual([{
+      index: 0,
+      match: 'http://news.com'
+    }]);
 });
