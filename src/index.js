@@ -40,7 +40,7 @@ const initialUiState = fromJS({
       selectedCiteIndex: null
     }
   },
-  modal: 'SIGNED_IN_MODAL'
+  modal: null
 });
 function uiReducer(state = initialUiState, action = {}) {
   switch (action.type) {
