@@ -39,6 +39,7 @@
     "detect-port": "1.1.0",
     "dotenv": "2.0.0",
     "eslint": "^3.19.0",
+    "eslint-config-nth": "^1.0.1",
     "eslint-config-react-app": "^0.6.2",
     "eslint-loader": "1.6.0",
     "eslint-plugin-flowtype": "2.21.0",
@@ -68,6 +69,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "ci-test": "CI=true npm-run-all test build",
+    "lint-fix": "eslint src --fix",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
@@ -103,134 +105,6 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app",
-    "rules": {
-      "no-compare-neg-zero": "error",
-      "no-console": "warn",
-      "no-debugger": "warn",
-      "no-alert": "warn",
-      "no-empty": "error",
-      "no-constant-condition": "error",
-      "no-extra-boolean-cast": "error",
-      "no-extra-semi": "warn",
-      "no-irregular-whitespace": "error",
-      "no-unsafe-finally": "warn",
-      "curly": "warn",
-      "no-case-declarations": "error",
-      "no-else-return": "warn",
-      "no-implicit-coercion": "error",
-      "no-magic-numbers": [
-        "warn",
-        {
-          "ignoreArrayIndexes": true,
-          "ignore": [
-            0,
-            1
-          ]
-        }
-      ],
-      "no-multi-spaces": "warn",
-      "no-param-reassign": "warn",
-      "no-return-assign": "error",
-      "no-return-await": "warn",
-      "no-unmodified-loop-condition": "warn",
-      "no-useless-call": "error",
-      "no-useless-return": "warn",
-      "prefer-promise-reject-errors": "warn",
-      "require-await": "warn",
-      "array-bracket-spacing": "warn",
-      "block-spacing": "warn",
-      "brace-style": "warn",
-      "camelcase": "warn",
-      "comma-dangle": "warn",
-      "comma-spacing": "warn",
-      "comma-style": "warn",
-      "computed-property-spacing": "warn",
-      "func-call-spacing": "warn",
-      "id-blacklist": [
-        "warn",
-        "data",
-        "temp",
-        "tmp"
-      ],
-      "indent": [
-        "warn",
-        2
-      ],
-      "jsx-quotes": "warn",
-      "key-spacing": "warn",
-      "keyword-spacing": "warn",
-      "max-len": [
-        "warn",
-        120
-      ],
-      "no-lonely-if": "warn",
-      "no-multiple-empty-lines": [
-        "warn",
-        {
-          "max": 1
-        }
-      ],
-      "no-unneeded-ternary": "warn",
-      "object-curly-spacing": "warn",
-      "operator-linebreak": "warn",
-      "quote-props": [
-        "error",
-        "as-needed"
-      ],
-      "quotes": [
-        "warn",
-        "single",
-        {
-          "avoidEscape": true
-        }
-      ],
-      "semi": [
-        "warn",
-        "always"
-      ],
-      "semi-spacing": "warn",
-      "space-before-blocks": "warn",
-      "space-before-function-paren": [
-        "warn",
-        "never"
-      ],
-      "space-in-parens": "warn",
-      "space-infix-ops": "warn",
-      "space-unary-ops": "warn",
-      "spaced-comment": "warn",
-      "template-tag-spacing": "warn",
-      "arrow-body-style": "warn",
-      "arrow-parens": [
-        "warn",
-        "as-needed"
-      ],
-      "arrow-spacing": "warn",
-      "generator-star-spacing": [
-        "warn",
-        {
-          "before": false,
-          "after": true
-        }
-      ],
-      "no-class-assign": "error",
-      "no-var": "error",
-      "object-shorthand": "warn",
-      "dot-notation": "error",
-      "no-unused-vars": "warn",
-      "prefer-const": "warn",
-      "prefer-rest-params": "warn",
-      "prefer-spread": "warn",
-      "prefer-template": "warn",
-      "template-curly-spacing": "warn",
-      "no-duplicate-imports": "error",
-      "yield-star-spacing": [
-        "warn",
-        {
-          "before": false,
-          "after": true
-        }
-      ]
-    }
+    "extends": "nth/react"
   }
 }
